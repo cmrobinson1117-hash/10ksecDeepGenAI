@@ -22,8 +22,15 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
-import faiss
 import numpy as np
+
+try:
+    import faiss
+    _FAISS_AVAILABLE = True
+except ImportError:
+    faiss = None
+    _FAISS_AVAILABLE = False
+    print("[WARNING] faiss not installed. Falling back to numpy cosine similarity search.")
 from langchain_core.tools import tool
 from langchain_ollama import ChatOllama
 from sentence_transformers import SentenceTransformer
@@ -76,7 +83,12 @@ class FilingStore:
         self.data_dir = Path(data_dir)
         self.embedder = SentenceTransformer(embed_model)
         self.chunks = self._load_chunks(self.data_dir / "chunks.jsonl")
-        self.index = faiss.read_index(str(self.data_dir / "faiss.index"))
+        self._embeddings: np.ndarray | None = None  # loaded lazily for numpy fallback
+        if _FAISS_AVAILABLE:
+            self.index = faiss.read_index(str(self.data_dir / "faiss.index"))
+        else:
+            self.index = None
+            self._embeddings = self._load_embeddings_numpy()
         self.available_filings = self._build_filing_list()
         self._bm25 = self._build_bm25() if _BM25_AVAILABLE else None
 
@@ -96,6 +108,24 @@ class FilingStore:
         tokenised = [str(c.get("text", "")).lower().split() for c in self.chunks]
         return BM25Okapi(tokenised)
 
+    def _load_embeddings_numpy(self) -> np.ndarray:
+        """
+        Fallback when faiss is unavailable: embed all chunks with the
+        sentence transformer and cache as a (N, D) float32 array.
+        """
+        texts = [str(c.get("text", "")) for c in self.chunks]
+        embs = self.embedder.encode(texts, normalize_embeddings=True, show_progress_bar=False)
+        return embs.astype("float32")
+
+    def _numpy_search(self, query: str, k: int) -> list[tuple[int, float]]:
+        """Cosine similarity search via numpy dot product (embeddings are L2-normalised)."""
+        if self._embeddings is None:
+            self._embeddings = self._load_embeddings_numpy()
+        q_emb = self.embedder.encode([query], normalize_embeddings=True).astype("float32")[0]
+        scores = self._embeddings @ q_emb  # cosine similarity
+        top_idxs = np.argsort(scores)[::-1][:k]
+        return [(int(i), float(scores[i])) for i in top_idxs]
+
     # ------------------------------------------------------------------
     # Hybrid search (BM25 + FAISS via RRF)
     # ------------------------------------------------------------------
@@ -111,9 +141,13 @@ class FilingStore:
         n = len(self.chunks)
 
         # --- Dense ranking ---
-        emb = self.embedder.encode([query], normalize_embeddings=True).astype("float32")
-        _, dense_idxs = self.index.search(emb, n)
-        dense_rank: dict[int, int] = {int(idx): rank for rank, idx in enumerate(dense_idxs[0])}
+        if _FAISS_AVAILABLE and self.index is not None:
+            emb = self.embedder.encode([query], normalize_embeddings=True).astype("float32")
+            _, dense_idxs = self.index.search(emb, n)
+            dense_rank: dict[int, int] = {int(idx): rank for rank, idx in enumerate(dense_idxs[0])}
+        else:
+            pairs = self._numpy_search(query, n)
+            dense_rank = {idx: rank for rank, (idx, _) in enumerate(pairs)}
 
         # --- BM25 ranking ---
         bm25_scores = self._bm25.get_scores(query.lower().split())
@@ -146,12 +180,17 @@ class FilingStore:
         return results
 
     def semantic_search(self, query: str, k: int = TOP_K) -> list[dict[str, Any]]:
-        """Dense-only FAISS search (used as fallback)."""
-        emb = self.embedder.encode([query], normalize_embeddings=True).astype("float32")
-        scores, idxs = self.index.search(emb, k)
+        """Dense-only search: FAISS if available, otherwise numpy cosine similarity."""
+        if _FAISS_AVAILABLE and self.index is not None:
+            emb = self.embedder.encode([query], normalize_embeddings=True).astype("float32")
+            scores, idxs = self.index.search(emb, k)
+            pairs = list(zip(idxs[0], scores[0]))
+        else:
+            pairs = self._numpy_search(query, k)
+
         results: list[dict[str, Any]] = []
-        for rank, (idx, score) in enumerate(zip(idxs[0], scores[0]), start=1):
-            if idx == -1:
+        for rank, (idx, score) in enumerate(pairs, start=1):
+            if int(idx) == -1:
                 continue
             chunk = self.chunks[int(idx)]
             results.append(
