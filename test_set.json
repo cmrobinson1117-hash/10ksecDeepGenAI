@@ -1,0 +1,226 @@
+[
+  {
+    "id": 1,
+    "category": "corpus_meta",
+    "question": "What filings are available in the corpus?",
+    "expected_answer": "The corpus contains 10-K filings for Apple, Tesla, Delta Air Lines, Home Depot, and Coca-Cola for the years 2023 and 2024.",
+    "source": "corpus metadata"
+  },
+  {
+    "id": 2,
+    "category": "company_specific",
+    "question": "What are Apple's primary business segments according to its 2024 10-K?",
+    "expected_answer": "Apple's primary business segments include iPhone, Mac, iPad, Wearables/Home/Accessories, and Services.",
+    "source": "Apple 2024 10-K"
+  },
+  {
+    "id": 3,
+    "category": "company_specific",
+    "question": "What are Tesla's main revenue-generating business segments in 2024?",
+    "expected_answer": "Tesla's main segments are Automotive (including vehicle sales and leasing) and Energy Generation and Storage.",
+    "source": "Tesla 2024 10-K"
+  },
+  {
+    "id": 4,
+    "category": "company_specific",
+    "question": "What cybersecurity risks does Apple disclose in its 2024 10-K?",
+    "expected_answer": "Apple discloses risks including unauthorized access to customer data, system outages, and the potential for cyberattacks targeting its products and services infrastructure.",
+    "source": "Apple 2024 10-K"
+  },
+  {
+    "id": 5,
+    "category": "company_specific",
+    "question": "What cybersecurity risks does Tesla mention in its 2024 10-K?",
+    "expected_answer": "Tesla discloses risks of cyberattacks on its vehicles, manufacturing systems, and customer data, as well as threats to its over-the-air software update infrastructure.",
+    "source": "Tesla 2024 10-K"
+  },
+  {
+    "id": 6,
+    "category": "company_specific",
+    "question": "What supply chain risks does Delta Air Lines identify in its 2024 10-K?",
+    "expected_answer": "Delta identifies risks including dependence on aircraft manufacturers like Boeing, fuel supply volatility, and disruptions to third-party maintenance providers.",
+    "source": "Delta 2024 10-K"
+  },
+  {
+    "id": 7,
+    "category": "company_specific",
+    "question": "What are the key risk factors for Home Depot in its 2024 10-K?",
+    "expected_answer": "Home Depot's key risk factors include housing market sensitivity, supply chain disruptions, economic downturns reducing consumer spending on home improvement, and cybersecurity threats.",
+    "source": "Home Depot 2024 10-K"
+  },
+  {
+    "id": 8,
+    "category": "company_specific",
+    "question": "How does Coca-Cola describe its global business strategy in its 2024 10-K?",
+    "expected_answer": "Coca-Cola's strategy focuses on marketing its beverage portfolio globally, expanding the Trademark Coca-Cola brand, growing its still beverages segment, and leveraging its bottler network.",
+    "source": "Coca-Cola 2024 10-K"
+  },
+  {
+    "id": 9,
+    "category": "cross_company",
+    "question": "Compare the cybersecurity risk disclosures between Apple and Tesla in their 2024 10-K filings.",
+    "expected_answer": "Both Apple and Tesla disclose risks of cyberattacks on infrastructure and customer data. Apple emphasizes risks to its services and App Store platform, while Tesla additionally highlights risks to vehicle software and over-the-air updates.",
+    "source": "Apple 2024 10-K, Tesla 2024 10-K"
+  },
+  {
+    "id": 10,
+    "category": "cross_company",
+    "question": "What operational risks are common across all five companies in their 2024 filings?",
+    "expected_answer": "Common operational risks across all five companies include supply chain disruption, cybersecurity threats, macroeconomic uncertainty, and regulatory compliance challenges.",
+    "source": "Apple, Tesla, Delta, Home Depot, Coca-Cola 2024 10-Ks"
+  },
+  {
+    "id": 11,
+    "category": "cross_company",
+    "question": "How do Apple and Home Depot differ in their descriptions of customer concentration risk?",
+    "expected_answer": "Apple has a diverse global consumer base with limited single-customer concentration, while Home Depot's revenues are more tied to the US housing market cycle and professional contractor demand.",
+    "source": "Apple 2024 10-K, Home Depot 2024 10-K"
+  },
+  {
+    "id": 12,
+    "category": "year_comparison",
+    "question": "Did Apple's disclosed risk factors change notably between its 2023 and 2024 10-K filings?",
+    "expected_answer": "Apple's 2024 10-K reflects increased emphasis on AI-related risks and regulatory scrutiny from the EU Digital Markets Act compared to its 2023 filing.",
+    "source": "Apple 2023 10-K, Apple 2024 10-K"
+  },
+  {
+    "id": 13,
+    "category": "year_comparison",
+    "question": "How did Tesla's business segment description evolve from 2023 to 2024?",
+    "expected_answer": "Tesla's 2024 10-K reflects greater emphasis on the Energy Generation and Storage segment's growth compared to 2023, alongside continued focus on Automotive.",
+    "source": "Tesla 2023 10-K, Tesla 2024 10-K"
+  },
+  {
+    "id": 14,
+    "category": "year_comparison",
+    "question": "Did Delta's risk disclosures related to fuel costs change from 2023 to 2024?",
+    "expected_answer": "Delta's 2024 filing continues to flag fuel price volatility as a major risk, consistent with 2023, though updated to reflect current market conditions and hedging strategies.",
+    "source": "Delta 2023 10-K, Delta 2024 10-K"
+  },
+  {
+    "id": 15,
+    "category": "company_specific",
+    "question": "What does Apple say about its Services segment in its 2024 10-K?",
+    "expected_answer": "Apple describes Services as a high-margin segment including the App Store, Apple Music, iCloud, Apple TV+, and Apple Pay, with continued investment in subscription growth.",
+    "source": "Apple 2024 10-K"
+  },
+  {
+    "id": 16,
+    "category": "company_specific",
+    "question": "What does Home Depot say about its Pro customer strategy in 2024?",
+    "expected_answer": "Home Depot describes its Pro strategy as targeting professional contractors and tradespeople with dedicated services, bulk purchasing options, and its PRO Xtra loyalty program.",
+    "source": "Home Depot 2024 10-K"
+  },
+  {
+    "id": 17,
+    "category": "company_specific",
+    "question": "What regulatory risks does Coca-Cola disclose in its 2024 10-K?",
+    "expected_answer": "Coca-Cola discloses regulatory risks including potential sugar taxes, packaging and labeling regulations, environmental regulations, and compliance costs across its global markets.",
+    "source": "Coca-Cola 2024 10-K"
+  },
+  {
+    "id": 18,
+    "category": "company_specific",
+    "question": "How does Delta describe its loyalty program in its 2024 10-K?",
+    "expected_answer": "Delta describes its SkyMiles loyalty program as a key competitive differentiator, noting its credit card partnerships and the program's contribution to ancillary revenue.",
+    "source": "Delta 2024 10-K"
+  },
+  {
+    "id": 19,
+    "category": "company_specific",
+    "question": "What does Tesla say about competition in its 2024 10-K?",
+    "expected_answer": "Tesla describes intense and growing competition from traditional automakers entering the EV market and from other EV startups, as well as competition in its energy storage business.",
+    "source": "Tesla 2024 10-K"
+  },
+  {
+    "id": 20,
+    "category": "cross_company",
+    "question": "Which companies in the corpus mention artificial intelligence or machine learning as part of their business strategy in 2024?",
+    "expected_answer": "Apple and Tesla both discuss AI and machine learning as central to product development. Apple references AI features in its devices and services; Tesla highlights AI for autonomous driving.",
+    "source": "Apple 2024 10-K, Tesla 2024 10-K"
+  },
+  {
+    "id": 21,
+    "category": "company_specific",
+    "question": "What does Apple say about its environmental sustainability commitments in its 2024 10-K?",
+    "expected_answer": "Apple references its carbon neutrality goals, including plans to make all products carbon neutral by 2030, and discusses its use of recycled materials in manufacturing.",
+    "source": "Apple 2024 10-K"
+  },
+  {
+    "id": 22,
+    "category": "company_specific",
+    "question": "What does Coca-Cola say about water stewardship in its 2024 10-K?",
+    "expected_answer": "Coca-Cola describes water as a critical ingredient and operational input, disclosing commitments to replenish water in water-stressed communities and improve water efficiency at its facilities.",
+    "source": "Coca-Cola 2024 10-K"
+  },
+  {
+    "id": 23,
+    "category": "company_specific",
+    "question": "What are Home Depot's main product categories as described in its 2024 10-K?",
+    "expected_answer": "Home Depot's main product categories include building materials, lawn and garden, tools, paint, plumbing, electrical, flooring, and home décor.",
+    "source": "Home Depot 2024 10-K"
+  },
+  {
+    "id": 24,
+    "category": "cross_company",
+    "question": "Which companies discuss geopolitical risk as a significant factor in their 2024 10-K filings?",
+    "expected_answer": "Apple and Coca-Cola both discuss geopolitical risk prominently, given their significant international revenue exposure and global supply chains.",
+    "source": "Apple 2024 10-K, Coca-Cola 2024 10-K"
+  },
+  {
+    "id": 25,
+    "category": "cross_company",
+    "question": "Compare how Apple and Tesla describe their supply chain strategies in 2024.",
+    "expected_answer": "Apple focuses on diversifying its supplier base and reducing dependence on any single country, while Tesla emphasizes vertical integration of battery and manufacturing supply chains.",
+    "source": "Apple 2024 10-K, Tesla 2024 10-K"
+  },
+  {
+    "id": 26,
+    "category": "company_specific",
+    "question": "What does Delta's 2023 10-K say about its fleet modernization strategy?",
+    "expected_answer": "Delta's 2023 10-K describes ongoing fleet renewal with more fuel-efficient aircraft to reduce operating costs and lower its carbon footprint.",
+    "source": "Delta 2023 10-K"
+  },
+  {
+    "id": 27,
+    "category": "company_specific",
+    "question": "What human capital disclosures does Home Depot make in its 2024 10-K?",
+    "expected_answer": "Home Depot discloses its workforce size, diversity initiatives, compensation and benefits programs, and efforts to attract and retain skilled hourly and professional employees.",
+    "source": "Home Depot 2024 10-K"
+  },
+  {
+    "id": 28,
+    "category": "company_specific",
+    "question": "How does Apple describe its intellectual property strategy in its 2024 10-K?",
+    "expected_answer": "Apple emphasizes protection of its patents, trademarks, and trade secrets, and notes ongoing litigation to defend its intellectual property against infringement.",
+    "source": "Apple 2024 10-K"
+  },
+  {
+    "id": 29,
+    "category": "cross_company",
+    "question": "What macroeconomic risks do all five companies mention across their 2024 10-K filings?",
+    "expected_answer": "All five companies cite inflation, interest rate sensitivity, currency exchange risk, and potential recessionary impact on consumer or business spending as macroeconomic risks.",
+    "source": "Apple, Tesla, Delta, Home Depot, Coca-Cola 2024 10-Ks"
+  },
+  {
+    "id": 30,
+    "category": "company_specific",
+    "question": "What does Tesla say about its Supercharger network in its 2024 10-K?",
+    "expected_answer": "Tesla describes its Supercharger network as a key competitive advantage that supports EV adoption, and notes ongoing global expansion of the network.",
+    "source": "Tesla 2024 10-K"
+  },
+  {
+    "id": 31,
+    "category": "cross_company",
+    "question": "Which companies in the corpus disclose legal proceedings as material risks in their 2024 10-Ks?",
+    "expected_answer": "Apple, Tesla, and Coca-Cola all disclose material legal proceedings, including patent litigation for Apple, regulatory and safety investigations for Tesla, and antitrust matters for Coca-Cola.",
+    "source": "Apple, Tesla, Coca-Cola 2024 10-Ks"
+  },
+  {
+    "id": 32,
+    "category": "year_comparison",
+    "question": "How did Coca-Cola's risk factor language around health and wellness trends change from 2023 to 2024?",
+    "expected_answer": "Coca-Cola's 2024 filing reflects increased attention to consumer demand for low-sugar and zero-calorie beverages, with updated risk language around competition from health-focused brands.",
+    "source": "Coca-Cola 2023 10-K, Coca-Cola 2024 10-K"
+  }
+]
