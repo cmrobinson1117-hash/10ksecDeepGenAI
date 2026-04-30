@@ -32,8 +32,23 @@ except ImportError:
     _FAISS_AVAILABLE = False
     print("[WARNING] faiss not installed. Falling back to numpy cosine similarity search.")
 from langchain_core.tools import tool
-from langchain_ollama import ChatOllama
 from sentence_transformers import SentenceTransformer
+
+try:
+    from langchain_openai import ChatOpenAI as _ChatModel
+    _LLM_BACKEND = "openai"
+except ImportError:
+    try:
+        from langchain_anthropic import ChatAnthropic as _ChatModel
+        _LLM_BACKEND = "anthropic"
+    except ImportError:
+        try:
+            from langchain_ollama import ChatOllama as _ChatModel
+            _LLM_BACKEND = "ollama"
+        except ImportError:
+            _ChatModel = None
+            _LLM_BACKEND = None
+            print("[WARNING] No LLM backend found. Install langchain-openai, langchain-anthropic, or langchain-ollama.")
 
 try:
     from rank_bm25 import BM25Okapi
@@ -248,7 +263,15 @@ class FilingStore:
 # ---------------------------------------------------------------------------
 
 STORE = FilingStore(DEFAULT_DATA_DIR)
-chat_model = ChatOllama(model=OLLAMA_MODEL, temperature=0)
+import os as _os
+if _LLM_BACKEND == "openai":
+    chat_model = _ChatModel(model="gpt-4o-mini", temperature=0, api_key=_os.environ.get("OPENAI_API_KEY", ""))
+elif _LLM_BACKEND == "anthropic":
+    chat_model = _ChatModel(model="claude-3-haiku-20240307", temperature=0, api_key=_os.environ.get("ANTHROPIC_API_KEY", ""))
+elif _LLM_BACKEND == "ollama":
+    chat_model = _ChatModel(model=OLLAMA_MODEL, temperature=0)
+else:
+    chat_model = None
 
 # ---------------------------------------------------------------------------
 # Tools
@@ -405,6 +428,8 @@ def ask_agent(user_query: str) -> str:
         fallback = f"{user_query} SEC 10-K business segments products strategy risk"
         context = search_sec_filings.invoke({"query": fallback, "k": TOP_K})
 
+    if chat_model is None:
+        return ("No LLM backend configured. Set OPENAI_API_KEY or ANTHROPIC_API_KEY in Streamlit secrets.\n\nRaw context:\n" + context)
     prompt = _SYNTHESIS_TEMPLATE.format(question=user_query, context=context)
     return chat_model.invoke(prompt).content.strip()
 
