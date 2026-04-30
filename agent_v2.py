@@ -61,7 +61,7 @@ except ImportError:
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "processed"
+DEFAULT_DATA_DIR = Path(__file__).resolve().parent / "data" / "processed"
 EMBED_MODEL = "all-MiniLM-L6-v2"
 OLLAMA_MODEL = "llama3.1:8b"
 TOP_K = 5
@@ -96,12 +96,51 @@ class FilingStore:
 
     def __init__(self, data_dir: Path, embed_model: str = EMBED_MODEL) -> None:
         self.data_dir = Path(data_dir)
+        chunks_path = self.data_dir / "chunks.jsonl"
+        index_path = self.data_dir / "faiss.index"
+
+        if not chunks_path.exists():
+            raise FileNotFoundError(
+                f"
+
+{chr(61)*60}
+"
+                "DATA FILES NOT FOUND
+"
+                f"{chr(61)*60}
+"
+                f"Expected: {chunks_path}
+
+"
+                "The processed data files are missing from the deployment.
+"
+                "To fix, commit your data files to the repo:
+
+"
+                "    git add data/processed/chunks.jsonl
+"
+                "    git add data/processed/faiss.index
+"
+                "    git commit -m 'add processed data files'
+"
+                "    git push
+
+"
+                "If files exceed GitHubs 100MB limit, use Git LFS:
+"
+                "    git lfs track 'data/processed/*'
+"
+                f"{chr(61)*60}"
+            )
+
         self.embedder = SentenceTransformer(embed_model)
-        self.chunks = self._load_chunks(self.data_dir / "chunks.jsonl")
+        self.chunks = self._load_chunks(chunks_path)
         self._embeddings: np.ndarray | None = None  # loaded lazily for numpy fallback
-        if _FAISS_AVAILABLE:
-            self.index = faiss.read_index(str(self.data_dir / "faiss.index"))
+        if _FAISS_AVAILABLE and index_path.exists():
+            self.index = faiss.read_index(str(index_path))
         else:
+            if _FAISS_AVAILABLE and not index_path.exists():
+                print(f"[WARNING] faiss.index not found at {index_path}. Falling back to numpy.")
             self.index = None
             self._embeddings = self._load_embeddings_numpy()
         self.available_filings = self._build_filing_list()
